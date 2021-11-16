@@ -44,6 +44,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         if (params.categoryid) {
             this.categoryIdParam = [(params.categoryid).toString()];
             this._getProducts(this.categoryIdParam);
+            this.setCategoryCheckBox(params);
             this.isCategoryPage = true;
   
         } else if (params.searchText) {
@@ -99,6 +100,16 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         console.log("FROM - categoryFilter" + selectedCategories)
 
     this._getProductsNEW(selectedCategories);   
+  }
+
+  setCategoryCheckBox(cat: any) {
+    console.log(cat)
+    for(let i = 0; this.categories.length; i++) {
+        if (this.categories[i] === cat) {
+                // set the checkbox for the category
+            break;
+        }
+    }
   }
 
   onSortSelected(sort: any) {
