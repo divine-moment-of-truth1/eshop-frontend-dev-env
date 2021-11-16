@@ -7,6 +7,7 @@ import { ProductsService } from '../../services/products.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 @Component({
   selector: 'products-list',
@@ -37,25 +38,28 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.selectedSortOption = { name: "Alphabetical", value: "name" };
-    this.isCategoryPage = true;
+    this.isCategoryPage = false;
 
-    // If navigated to this page by clicking one of the category buttons on the home page
     this.activatedRoute.queryParams.subscribe((params) => {
+        // If navigated to this page by clicking one of the category buttons on the home page
         if (params.categoryid) {
+            console.log("HELLO!!!")
             this.categoryIdParam = [(params.categoryid).toString()];
             this._getProducts(this.categoryIdParam);
-            this.setCategoryCheckBox(params);
-            this.isCategoryPage = true;
-  
+            this._getCategories(this.categoryIdParam);
+            // this.setCategoryCheckBox(params);
+            this.isCategoryPage = false;
         } else if (params.searchText) {
             this.searchTextParam = params.searchText;
-            this._getProductsBySearchCriteria();
+            this._getProducts();
+            // this._getProductsBySearchCriteria();
+            this._getCategories();
             this.isCategoryPage = false;
         } else {
             this._getProducts();
+            this._getCategories();
          }
     })
-    this._getCategories();
   }
 
   ngOnDestroy(): void {
@@ -63,33 +67,31 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.endSubs$.complete();
   }
 
+//   private _getProducts(categoriesFilter?: string[]) {
+//     this.productsService.getProducts(this.selectedSortOption, categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {
+//         this.products = product;
+//     })
+//   }
+
+//   private _getProductsBySearchCriteria() {
+//     this.productsService.getProductsBySearchCriteria(this.selectedSortOption, this.searchTextParam).pipe(takeUntil(this.endSubs$)).subscribe(product => {
+//         this.products = product;
+//     })
+//   }
 
   private _getProducts(categoriesFilter?: string[]) {
-    //   this.productsService.getProducts(categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {
-        this.productsService.getProducts(this.selectedSortOption, categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {
-          this.products = product;
-    })
-  }
-
-  // private _getProductsBySearchCriteria(searchText: string) {
-  private _getProductsBySearchCriteria() {
-        this.productsService.getProductsBySearchCriteria(this.selectedSortOption, this.searchTextParam).pipe(takeUntil(this.endSubs$)).subscribe(product => {
-        // this.productsService.getProductsBySearchCriteria(searchText, this.selectedSortOption).pipe(takeUntil(this.endSubs$)).subscribe(product => {
+    this.productsService.getProductsNEW(this.selectedSortOption, this.searchTextParam, categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {
         this.products = product;
     })
   }
 
-  private _getProductsNEW(categoriesFilter?: string[]) {
-      console.log(categoriesFilter)
-        this.productsService.getProductsNEW(this.selectedSortOption, this.searchTextParam, categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {
-          this.products = product;
+  private _getCategories(setCategory?: any) {
+    this.categoryService.getCategories().pipe(takeUntil(this.endSubs$)).subscribe(category => {
+        this.categories = category;
+        if (setCategory) {
+            this.setCategoryCheckBox(setCategory);
+        }
     })
-  }
-
-  private _getCategories() {
-      this.categoryService.getCategories().pipe(takeUntil(this.endSubs$)).subscribe(category => {
-          this.categories = category;
-      })
   }
 
   categoryFilter() {
@@ -97,26 +99,24 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         .filter(category => category.checked)
         .map(cat => cat.id);
 
-        console.log("FROM - categoryFilter" + selectedCategories)
-
-    this._getProductsNEW(selectedCategories);   
+    this._getProducts(selectedCategories);   
   }
 
-  setCategoryCheckBox(cat: any) {
-    console.log(cat)
-    for(let i = 0; this.categories.length; i++) {
-        if (this.categories[i] === cat) {
-                // set the checkbox for the category
-            break;
+  setCategoryCheckBox(categoryId: string) {
+    const categoryid = categoryId.toString()
+
+    for(let i = 0; i < this.categories.length; i++) {
+        console.log(this.categories[i])
+        if (this.categories[i].id === categoryid) {
+            console.log(this.categories[i].name)
+            this.categories[i].checked = true;
         }
     }
   }
 
   onSortSelected(sort: any) {
-      console.log(sort)
     this.selectedSortOption = sort;
     this.categoryFilter();
-    // this._getProductsNEW();
   }
 
 }
