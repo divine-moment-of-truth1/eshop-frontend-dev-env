@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,9 +8,6 @@ import { Router } from '@angular/router';
   ]
 })
 export class ProductsSearchComponent implements OnInit {
-
-    // used to enable the category checkbox section in the parent product list component
-  // @Output() enableCategoryCheckboxes = new EventEmitter<boolean>();
 
   searchCriteria: string;
   missingSearchText;
@@ -27,10 +24,8 @@ export class ProductsSearchComponent implements OnInit {
         this.router.navigate(['/products'], { queryParams: { searchText: this.searchCriteria } });
         this.searchCriteria = "";
         this.missingSearchText = false;
-        // this.enableCategoryCheckboxes.emit(true);
      } else {
         this.missingSearchText = true;
-        console.log(this.missingSearchText);
      }
     
   }
