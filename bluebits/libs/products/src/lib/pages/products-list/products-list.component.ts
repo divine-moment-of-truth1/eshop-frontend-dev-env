@@ -7,7 +7,6 @@ import { ProductsService } from '../../services/products.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 @Component({
   selector: 'products-list',
@@ -43,16 +42,13 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.subscribe((params) => {
         // If navigated to this page by clicking one of the category buttons on the home page
         if (params.categoryid) {
-            console.log("HELLO!!!")
             this.categoryIdParam = [(params.categoryid).toString()];
             this._getProducts(this.categoryIdParam);
             this._getCategories(this.categoryIdParam);
-            // this.setCategoryCheckBox(params);
             this.isCategoryPage = false;
         } else if (params.searchText) {
             this.searchTextParam = params.searchText;
             this._getProducts();
-            // this._getProductsBySearchCriteria();
             this._getCategories();
             this.isCategoryPage = false;
         } else {
@@ -66,18 +62,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.endSubs$.next();
     this.endSubs$.complete();
   }
-
-//   private _getProducts(categoriesFilter?: string[]) {
-//     this.productsService.getProducts(this.selectedSortOption, categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {
-//         this.products = product;
-//     })
-//   }
-
-//   private _getProductsBySearchCriteria() {
-//     this.productsService.getProductsBySearchCriteria(this.selectedSortOption, this.searchTextParam).pipe(takeUntil(this.endSubs$)).subscribe(product => {
-//         this.products = product;
-//     })
-//   }
 
   private _getProducts(categoriesFilter?: string[]) {
     this.productsService.getProductsNEW(this.selectedSortOption, this.searchTextParam, categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {

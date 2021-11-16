@@ -1,5 +1,9 @@
 <div class="products-page">
     <div class="grid">
+        <div class="col-3"></div>
+        <div class="col-9" *ngIf="products.length < 1">
+            <h3>"Oops, we didn't find any results matching your search criteria."</h3>
+        </div>
         <div class="col-12">
             <h3>Sort by: </h3>
             <p-dropdown 
@@ -47,17 +51,12 @@
                 <div class="col-4"></div>
             </div>
         </div>
-
-        <div class="col-12" *ngIf="isCategoryPage">
+    </div>
+    <div class="grid">
+        <!-- <div class="col-3"></div> -->
+        <div class="col-12">
             <p-paginator [rows]="10" [totalRecords]="products.length" class="paginator"></p-paginator>
-        </div>
-
-        <div class="col-12" *ngIf="!isCategoryPage">
-            <p-paginator [rows]="10" [totalRecords]="products.length" class="paginator"></p-paginator>
-        </div>
-        
-        <div *ngIf="products.length < 1">
-            <h3>"Oops, we didn't find any results matching your search criteria."</h3>
         </div>
     </div>
+
 </div>
