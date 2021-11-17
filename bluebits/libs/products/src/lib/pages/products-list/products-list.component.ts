@@ -19,7 +19,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   categories: Category[] = [];
   endSubs$: Subject<any> = new Subject();
-  isCategoryPage: boolean;  // true if the product-list page is accessed from clicking a category button on the home page
+  searchNotFound = false;  // true if the product-list page is accessed from clicking a category button on the home page
   searchTextParam: string;
   categoryIdParam: string[];
   selectedSortOption;
@@ -37,7 +37,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.selectedSortOption = { name: "Alphabetical", value: "name" };
-    this.isCategoryPage = false;
+    // this.isCategoryPage = false;
 
     this.activatedRoute.queryParams.subscribe((params) => {
         // If navigated to this page by clicking one of the category buttons on the home page
@@ -45,12 +45,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             this.categoryIdParam = [(params.categoryid).toString()];
             this._getProducts(this.categoryIdParam);
             this._getCategories(this.categoryIdParam);
-            this.isCategoryPage = false;
         } else if (params.searchText) {
             this.searchTextParam = params.searchText;
             this._getProducts();
             this._getCategories();
-            this.isCategoryPage = false;
         } else {
             this._getProducts();
             this._getCategories();
@@ -66,6 +64,9 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   private _getProducts(categoriesFilter?: string[]) {
     this.productsService.getProductsNEW(this.selectedSortOption, this.searchTextParam, categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {
         this.products = product;
+        if( this.products.length === 0) {
+            this.searchNotFound = true;
+        }
     })
   }
 

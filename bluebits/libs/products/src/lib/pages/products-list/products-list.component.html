@@ -1,7 +1,7 @@
 <div class="products-page">
     <div class="grid">
         <div class="col-3"></div>
-        <div class="col-9" *ngIf="products.length < 1">
+        <div class="col-9"  *ngIf="searchNotFound">
             <h3>"Oops, we didn't find any results matching your search criteria."</h3>
         </div>
         <div class="col-12">
@@ -16,15 +16,7 @@
     </div>
 
     <div class="grid">
-          <!-- <div class="col-3" *ngIf="!isCategoryPage">
-            <h4>Categories</h4>
-            <div class="field-checkbox" *ngFor="let category of categories">
-                <p-checkbox [(ngModel)]="category.checked" [binary]="true" [inputId]="category.id" (onChange)="categoryFilter()"></p-checkbox>
-                <label for="{{ category.id }}">{{ category.name }}</label>
-            </div>
-        </div> -->
-
-        <div class="col-3" *ngIf="!isCategoryPage">
+        <div class="col-3">
             <h4>Categories</h4>
             <div class="field-checkbox" *ngFor="let category of categories">
                 <p-checkbox [(ngModel)]="category.checked" [binary]="true" [inputId]="category.id" (onChange)="categoryFilter()"></p-checkbox>
@@ -32,19 +24,9 @@
             </div>
         </div>
 
-        <!-- <div [ngClass]="{ 'col-9': !isCategoryPage, 'col-12': isCategoryPage }">
+        <div class="col-9">
             <div class="grid" *ngIf="products">
-                <div [ngClass]="{ 'col-4': !isCategoryPage, 'col-3': isCategoryPage }" *ngFor="let product of products">
-                    <products-product-item [product]="product"></products-product-item>
-                </div>
-                <div class="col-4"></div>
-                <div class="col-4"></div>
-            </div>
-        </div> -->
-
-        <div [ngClass]="{ 'col-9': !isCategoryPage }">
-            <div class="grid" *ngIf="products">
-                <div [ngClass]="{ 'col-4': !isCategoryPage }" *ngFor="let product of products">
+                <div class="col-4" *ngFor="let product of products">
                     <products-product-item [product]="product"></products-product-item>
                 </div>
                 <div class="col-4"></div>
@@ -52,8 +34,8 @@
             </div>
         </div>
     </div>
+
     <div class="grid">
-        <!-- <div class="col-3"></div> -->
         <div class="col-12">
             <p-paginator [rows]="10" [totalRecords]="products.length" class="paginator"></p-paginator>
         </div>

@@ -7,6 +7,7 @@
         name="search"
         id="search"
         [(ngModel)]="searchCriteria"
+        (keyup.enter)="submitSearch()"
     >
     <!-- <small *ngIf="missingSearchText" class="p-error">Invalid</small> -->
     <p-button 
