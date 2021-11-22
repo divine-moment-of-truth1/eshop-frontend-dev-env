@@ -16,6 +16,7 @@ export class ProductsListComponent implements OnInit {
 
   products: Product[] = [];
   endSub$: Subject<any> = new Subject();
+  selectedSortOption = { name: "Alphabetical", value: "name" };
 
   constructor(private productService: 
     ProductsService, 
@@ -64,7 +65,7 @@ export class ProductsListComponent implements OnInit {
   
 
   private _getProducts() {
-      this.productService.getProducts()
+      this.productService.getProducts(this.selectedSortOption)
         .pipe(takeUntil(this.endSub$))
         .subscribe(product => {
             this.products = product;

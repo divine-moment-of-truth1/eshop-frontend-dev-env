@@ -37,8 +37,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.selectedSortOption = { name: "Alphabetical", value: "name" };
-    // this.isCategoryPage = false;
-
+ 
     this.activatedRoute.queryParams.subscribe((params) => {
         // If navigated to this page by clicking one of the category buttons on the home page
         if (params.categoryid) {
