@@ -65,7 +65,7 @@ export class ProductsListComponent implements OnInit {
   
 
   private _getProducts() {
-      this.productService.getProducts(this.selectedSortOption)
+      this.productService.getProductsAdmin(this.selectedSortOption, '')
         .pipe(takeUntil(this.endSub$))
         .subscribe(product => {
             this.products = product;

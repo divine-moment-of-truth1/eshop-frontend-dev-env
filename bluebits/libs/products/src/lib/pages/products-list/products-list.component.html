@@ -37,7 +37,8 @@
 
     <div class="grid">
         <div class="col-12">
-            <p-paginator [rows]="10" [totalRecords]="products.length" class="paginator"></p-paginator>
+            <!-- <p-paginator [rows]="10" [totalRecords]="this.totalCount" (onPageChange)="onPageChanged($event)" [rowsPerPageOptions]="[10,20,30]" class="paginator"></p-paginator> -->
+            <p-paginator [rows]="9" [totalRecords]="this.totalCount" (onPageChange)="onPageChanged($event)" class="paginator"></p-paginator>
         </div>
     </div>
 

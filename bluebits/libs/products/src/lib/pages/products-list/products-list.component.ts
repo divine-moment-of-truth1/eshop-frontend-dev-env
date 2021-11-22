@@ -7,6 +7,8 @@ import { ProductsService } from '../../services/products.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { ShopParams } from '../../models/shopParams';
+import { Pagination } from '../../models/pagination';
 
 @Component({
   selector: 'products-list',
@@ -29,6 +31,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     { name: "Price: High to Low", value: 'priceDesc' },
     { name: "Highest Rated", value: 'rating' },
   ];
+  shopParams = new ShopParams();
+  totalCount: number;
 
   constructor(private productsService: ProductsService,
     private categoryService: CategoriesService,
@@ -37,6 +41,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.selectedSortOption = { name: "Alphabetical", value: "name" };
+    this.shopParams.pageSize = 9;
  
     this.activatedRoute.queryParams.subscribe((params) => {
         // If navigated to this page by clicking one of the category buttons on the home page
@@ -61,12 +66,19 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   private _getProducts(categoriesFilter?: string[]) {
-    this.productsService.getProductsNEW(this.selectedSortOption, this.searchTextParam, categoriesFilter).pipe(takeUntil(this.endSubs$)).subscribe(product => {
-        this.products = product;
-        if( this.products.length === 0) {
-            this.searchNotFound = true;
-        }
-    })
+    this.productsService
+        .getProductsClient(this.selectedSortOption, this.searchTextParam, this.shopParams, categoriesFilter)
+        .pipe(takeUntil(this.endSubs$))
+        .subscribe((response: any) => {
+            console.log("Response from server:- " + response)
+            this.products = response.products;
+            this.shopParams.pageNumber = response.pageIndex;
+            this.shopParams.pageSize = response.pageSize;
+            this.totalCount = response.count;
+            if( this.products.length === 0) {
+                this.searchNotFound = true;
+            }
+        })
   }
 
   private _getCategories(setCategory?: any) {
@@ -79,6 +91,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   categoryFilter() {
+    this.shopParams.pageNumber = 0; 
+    this.shopParams.pageSize = 9;
     const selectedCategories = this.categories
         .filter(category => category.checked)
         .map(cat => cat.id);
@@ -101,6 +115,17 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   onSortSelected(sort: any) {
     this.selectedSortOption = sort;
     this.categoryFilter();
+  }
+
+  onPageChanged(event: any) {
+    this.shopParams.pageNumber = event.page;
+    this.shopParams.pageSize = event.rows;
+    this._getProducts()
+    console.log("On page change:- ")
+    console.log("First:- " + event.first)
+    console.log("Rows:- " + event.rows)
+    console.log("Page:- " + event.page)
+    console.log("PageCount:- " + event.pageCount)
   }
 
 }

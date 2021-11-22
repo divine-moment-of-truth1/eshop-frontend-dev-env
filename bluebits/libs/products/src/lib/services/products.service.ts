@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Product } from '../models/product';
 import { environment } from '@env/environment';
+import { ShopParams } from '../models/shopParams';
+import { Pagination } from '../models/pagination';
 
 
 @Injectable({
@@ -48,12 +50,37 @@ export class ProductsService {
         return this.http.get<Product[]>(this.apiURLProducts, { params: params } );
     }
 
-    getProductsNEW(sortBy: any, searchCriteria: string, categoriesFilter?: string[]): Observable<Product[]> {
+    getProductsClient(sortBy: any, searchCriteria: string, shopParams: ShopParams, categoriesFilter?: string[]): Observable<any> {
+      let params = new HttpParams();
+
+      if (categoriesFilter) {
+        params = params.append('categories', categoriesFilter.join(','));
+        console.log("Entered - categoriesFilter")
+      }
+
+      if (searchCriteria) {
+        params = params.append('searchText', searchCriteria);
+        console.log("Entered - searchCriteria")
+      }
+
+      params = params.append('sort', sortBy.value);
+      params = params.append('pageIndex', shopParams.pageNumber.toString());
+      params = params.append('pageIndex', shopParams.pageSize.toString());
+
+      console.log("Params sent to product service:- ")
+
+      console.log(params);
+      
+    //   return this.http.get<Pagination>(this.apiURLProducts, {params : params} );
+    return this.http.get<any>(this.apiURLProducts, {params : params} );
+    }
+
+    getProductsAdmin(sortBy: any, searchCriteria: string, categoriesFilter?: string[]): Observable<Product[]> {
         let params = new HttpParams();
 
       if (categoriesFilter) {
-          params = params.append('categories', categoriesFilter.join(','))
-          console.log("Entered - categoriesFilter")
+        params = params.append('categories', categoriesFilter.join(','))
+        console.log("Entered - categoriesFilter")
       }
 
       if (searchCriteria) {
@@ -62,8 +89,8 @@ export class ProductsService {
       }
 
       if (sortBy) {
-          params = params.append('sort', sortBy.value)
-          console.log("Entered - sortBy")
+        params = params.append('sort', sortBy.value)
+        console.log("Entered - sortBy")
       }
 
       //console.log(sortBy);
