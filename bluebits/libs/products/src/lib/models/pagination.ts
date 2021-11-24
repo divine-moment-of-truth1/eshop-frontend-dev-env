@@ -1,8 +1,8 @@
-import { Product } from "@bluebits/products";
+import { Product } from "./product";
 
 export class Pagination {
-    pageIndex: number;
-    pageSize: number;
+    // pageIndex: number;
+    // pageSize: number;
     count: number;
     products: Product[];
 

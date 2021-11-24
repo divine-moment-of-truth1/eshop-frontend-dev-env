@@ -24,6 +24,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   searchNotFound = false;  // true if the product-list page is accessed from clicking a category button on the home page
   searchTextParam: string;
   categoryIdParam: string[];
+  selectedCategories: string[];;
   selectedSortOption;
   sortOptions = [
     { name: "Alphabetical", value: 'name' },
@@ -31,7 +32,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     { name: "Price: High to Low", value: 'priceDesc' },
     { name: "Highest Rated", value: 'rating' },
   ];
-  shopParams = new ShopParams();
+  shopParams: ShopParams = new ShopParams();
   totalCount: number;
 
   constructor(private productsService: ProductsService,
@@ -40,16 +41,19 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.shopParams.pageNumber = 0;
+    this.shopParams.pageSize = 9;    
     this.selectedSortOption = { name: "Alphabetical", value: "name" };
-    this.shopParams.pageSize = 9;
+    this.searchTextParam = "";
  
     this.activatedRoute.queryParams.subscribe((params) => {
         // If navigated to this page by clicking one of the category buttons on the home page
         if (params.categoryid) {
-            this.categoryIdParam = [(params.categoryid).toString()];
-            this._getProducts(this.categoryIdParam);
-            this._getCategories(this.categoryIdParam);
+            this.selectedCategories = [(params.categoryid).toString()];
+              this._getProducts();
+            this._getCategories(this.selectedCategories);
         } else if (params.searchText) {
+            this.searchNotFound = false;
             this.searchTextParam = params.searchText;
             this._getProducts();
             this._getCategories();
@@ -65,16 +69,15 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.endSubs$.complete();
   }
 
-  private _getProducts(categoriesFilter?: string[]) {
+  private _getProducts() {
     this.productsService
-        .getProductsClient(this.selectedSortOption, this.searchTextParam, this.shopParams, categoriesFilter)
+        .getProductsClient(this.selectedSortOption, this.searchTextParam, this.shopParams, this.selectedCategories)
         .pipe(takeUntil(this.endSubs$))
-        .subscribe((response: any) => {
-            console.log("Response from server:- " + response)
+        .subscribe((response: Pagination) => {
             this.products = response.products;
-            this.shopParams.pageNumber = response.pageIndex;
-            this.shopParams.pageSize = response.pageSize;
-            this.totalCount = response.count;
+            // this.shopParams.pageNumber = response.pageIndex;
+            // this.shopParams.pageSize = response.pageSize;
+               this.totalCount = response.count;
             if( this.products.length === 0) {
                 this.searchNotFound = true;
             }
@@ -90,14 +93,17 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     })
   }
 
-  categoryFilter() {
-    this.shopParams.pageNumber = 0; 
-    this.shopParams.pageSize = 9;
-    const selectedCategories = this.categories
+  categoryFilter(fromOnPageChange?: boolean) {
+    if (!fromOnPageChange) {
+        this.shopParams.pageNumber = 0;
+        this.shopParams.pageSize = 9;  
+    }
+
+    this.selectedCategories = this.categories
         .filter(category => category.checked)
         .map(cat => cat.id);
 
-    this._getProducts(selectedCategories);   
+    this._getProducts();   
   }
 
   setCategoryCheckBox(categoryId: string) {
@@ -118,14 +124,16 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   onPageChanged(event: any) {
+        console.log("ENTERED onPageChanged!!!!!!!!!!")
+    const fromOnPageChange = true;
     this.shopParams.pageNumber = event.page;
     this.shopParams.pageSize = event.rows;
-    this._getProducts()
-    console.log("On page change:- ")
-    console.log("First:- " + event.first)
-    console.log("Rows:- " + event.rows)
-    console.log("Page:- " + event.page)
-    console.log("PageCount:- " + event.pageCount)
+    this.categoryFilter(fromOnPageChange);
+    // console.log("On page change:- ")
+    // console.log("First:- " + event.first)
+    // console.log("Rows:- " + event.rows)
+    // console.log("Page:- " + event.page)
+    // console.log("PageCount:- " + event.pageCount)
   }
 
 }
