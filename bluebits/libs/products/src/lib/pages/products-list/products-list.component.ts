@@ -50,7 +50,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         // If navigated to this page by clicking one of the category buttons on the home page
         if (params.categoryid) {
             this.selectedCategories = [(params.categoryid).toString()];
-              this._getProducts();
+            this._getProducts();
             this._getCategories(this.selectedCategories);
         } else if (params.searchText) {
             this.searchNotFound = false;
@@ -124,7 +124,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   onPageChanged(event: any) {
-        console.log("ENTERED onPageChanged!!!!!!!!!!")
+    console.log("ENTERED onPageChanged!!!!!!!!!!")
     const fromOnPageChange = true;
     this.shopParams.pageNumber = event.page;
     this.shopParams.pageSize = event.rows;
@@ -134,6 +134,12 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     // console.log("Rows:- " + event.rows)
     // console.log("Page:- " + event.page)
     // console.log("PageCount:- " + event.pageCount)
+  }
+
+  removeFilter(event) {
+    console.log(event);
+    this.searchTextParam = "";
+    this._getProducts();
   }
 
 }

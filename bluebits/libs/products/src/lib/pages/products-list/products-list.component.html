@@ -1,5 +1,10 @@
 <div class="products-page">
     <div class="grid">
+        <div class="col-3" *ngIf="!searchNotFound && this.searchTextParam !== ''">
+            <h3>Filter: <p-chip label="{{ this.searchTextParam }}" [removable]="true" (onRemove)="removeFilter($event)"></p-chip></h3>      
+        </div>
+    </div>
+    <div class="grid">
         <div class="col-3">
             <h3>Sort by: </h3>
             <p-dropdown 
@@ -11,11 +16,7 @@
         </div>
         <div class="col-9" *ngIf="searchNotFound">
             <h3>"Oops, we didn't find any results matching your search criteria."</h3>
-        </div>
-        <div class="col-9" *ngIf="!searchNotFound && this.searchTextParam !== ''">
-            <h2>"Showing results for {{ this.searchTextParam }}"</h2>
-        </div>
-        
+        </div>    
     </div>
 
     <div class="grid">

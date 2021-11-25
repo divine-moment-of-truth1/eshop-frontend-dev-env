@@ -9,7 +9,8 @@ import { UiModule } from '@bluebits/ui';
 import { PaginatorModule } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
-// import { OrdersModule } from '@bluebits/orders';
+import { BadgeModule } from "primeng/badge";
+import { ChipModule } from "primeng/chip";
 
 import { ProductsSearchComponent } from './components/products-search/products-search.component';
 import { CategoriesBannerComponent } from './components/categories-banner/categories-banner.component';
@@ -47,7 +48,10 @@ const routes: Routes = [
       UiModule,
       PaginatorModule,
       TableModule,
-      DropdownModule
+      DropdownModule,
+      ButtonModule,
+      BadgeModule,
+      ChipModule
     ],
   declarations: [
     ProductsSearchComponent,
