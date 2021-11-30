@@ -26,6 +26,9 @@ Create a component using nx:-
 nx generate @schematics/angular:component --name=COMPONENT-NAME --project=ui --style=scss --export --selector=COMPONENT-NAME --no-interactive
 
 Build applicatons:-
+cd here first:-
+cd /frontend/bluebits/
+
 nx build admin
 nx build ngshop
 nx build ngshop --output-path docs --base-href /ngshop/
