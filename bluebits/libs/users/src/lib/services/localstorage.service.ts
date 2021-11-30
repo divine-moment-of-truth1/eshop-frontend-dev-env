@@ -41,6 +41,7 @@ export class LocalstorageService {
     if(token) {
         const tokenDecode = JSON.parse(atob(token.split('.')[1]));
         if(tokenDecode) {
+            console.log("UserID is :- " + tokenDecode.userId)
             return tokenDecode.userId;
         } else {
             return null;

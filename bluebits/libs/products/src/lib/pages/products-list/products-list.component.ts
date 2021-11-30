@@ -34,6 +34,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   ];
   shopParams: ShopParams = new ShopParams();
   totalCount: number;
+  selectedPage: number;
 
   constructor(private productsService: ProductsService,
     private categoryService: CategoriesService,
@@ -41,6 +42,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.selectedPage = 0 ;
     this.shopParams.pageNumber = 0;
     this.shopParams.pageSize = 9;    
     this.selectedSortOption = { name: "Alphabetical", value: "name" };
@@ -53,6 +55,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             this._getProducts();
             this._getCategories(this.selectedCategories);
         } else if (params.searchText) {
+            console.log("HELLO!!!!!!!!!: - " + params.searchText);
             this.searchNotFound = false;
             this.searchTextParam = params.searchText;
             this._getProducts();
@@ -104,6 +107,26 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         .map(cat => cat.id);
 
     this._getProducts();   
+
+        // if (!fromOnPageChange) {
+        //     // this.shopParams.pageNumber = 0;
+    
+        //     if(this.shopParams.pageNumber > 0) {
+        //         // If the category check box has been deselected and the number of pages now becomes lower than the presently selected page then query the server for lower page numbers to prevent error
+        //         const pageNum = pageNumber;
+        //         for(let i = pageNum; i >= 0; i--) {
+        //             this.shopParams.pageNumber = i;
+        //             console.log("WORKING OUT PAGE NUMBER TO RETURN ITEMS (i) = " + i)
+        //             this._getProducts();
+        //             if(this.products.length > 0) {
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     this.shopParams.pageSize = 9;  
+        // } else {
+        //     this._getProducts();
+        // }
   }
 
   setCategoryCheckBox(categoryId: string) {
@@ -129,15 +152,15 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.shopParams.pageNumber = event.page;
     this.shopParams.pageSize = event.rows;
     this.categoryFilter(fromOnPageChange);
-    // console.log("On page change:- ")
-    // console.log("First:- " + event.first)
-    // console.log("Rows:- " + event.rows)
-    // console.log("Page:- " + event.page)
-    // console.log("PageCount:- " + event.pageCount)
+    console.log("On page change:- ")
+    console.log("First:- " + event.first)
+    console.log("Rows:- " + event.rows)
+    console.log("Page:- " + event.page)
+    console.log("PageCount:- " + event.pageCount)
   }
 
   removeFilter(event) {
-    console.log(event);
+    this.searchNotFound = false;
     this.searchTextParam = "";
     this._getProducts();
   }

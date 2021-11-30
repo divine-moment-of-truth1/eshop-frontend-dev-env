@@ -14,10 +14,12 @@ export class UsersEffects {
       ofType(UsersActions.buildUserSession),
       concatMap(() => {
         if (this.localstorageService.isValidToken()) {
+          console.log("TOKEN IS VALID:- " + this.localstorageService.isValidToken())
           const userId = this.localstorageService.getUserIdFromToken();
           if (userId) {
             return this.usersService.getUserById(userId).pipe(
               map((user) => {
+                console.log("User is:- " + user)
                 return UsersActions.buildUserSessionSuccess({ user: user });
               }),
               catchError(() => of(UsersActions.buildUserSessionFailed()))
@@ -26,6 +28,7 @@ export class UsersEffects {
             return of(UsersActions.buildUserSessionFailed());
           }
         } else {
+          console.log("TOKEN IS NOT VALID")
           return of(UsersActions.buildUserSessionFailed());
         }
       })

@@ -47,6 +47,7 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
   }
 
   navigateToCheckout() {
+      console.log(this.isCheckout);
     this.router.navigate(['/checkout'])
   }
 

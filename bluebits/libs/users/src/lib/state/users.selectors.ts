@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { USERS_FEATURE_KEY, UsersPartialState, UsersState } from './users.reducer';
+import { USERS_FEATURE_KEY, UsersState } from './users.reducer';
 
 // Lookup the 'Users' feature state managed by NgRx
 // export const getUsersState = createFeatureSelector<UsersPartialState, UsersState>(

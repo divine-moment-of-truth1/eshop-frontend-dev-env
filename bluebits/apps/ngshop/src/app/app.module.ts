@@ -21,6 +21,7 @@ import { NavComponent } from './shared/nav/nav.component';
 import { OrdersModule } from '@bluebits/orders';
 import { MessagesComponent } from './shared/messages/messages.component';
 import { MessageService } from 'primeng/api';
+import { config } from 'process';
 
 
 
@@ -33,7 +34,7 @@ const routes: Routes = [
   imports: [
     BrowserModule, 
     BrowserAnimationsModule, 
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' }),
     HttpClientModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
@@ -51,7 +52,8 @@ const routes: Routes = [
   ],
   bootstrap: [AppComponent],
   exports: [
-    MessagesComponent
+    MessagesComponent,
+    [RouterModule]
   ],
 })
 export class AppModule {}

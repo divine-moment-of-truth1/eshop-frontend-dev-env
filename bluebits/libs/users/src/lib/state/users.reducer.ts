@@ -1,5 +1,4 @@
 import { User } from '../models/user';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
 import * as UsersActions from './users.actions';

@@ -29,11 +29,11 @@ export class CartPageComponent implements OnInit, OnDestroy {
       this.endSubs$.complete();
   }
 
-
   private _getCartDetails() {
     this.cartService.cartSubject$.pipe(takeUntil(this.endSubs$)).subscribe(respCart => {
         this.cartItemsDetail = [];
         this.cartCount = respCart?.items?.length.toString() ?? "0";
+        console.log("CART COUNT:- " + this.cartCount)
         respCart.items.forEach(cartItem => {
             this.ordersService.getProductById(cartItem.product.id).subscribe(respProduct => {
                 this.cartItemsDetail.push({
