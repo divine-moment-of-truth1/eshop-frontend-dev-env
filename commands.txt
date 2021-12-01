@@ -29,9 +29,13 @@ Build applicatons:-
 cd here first:-
 cd /frontend/bluebits/
 
-nx build admin
-nx build ngshop
-nx build ngshop --output-path docs --base-href /ngshop/
-nx build ngshop --prod --output-path docs --base-href /ngshop/      - use for GitHub
-nx build ngshop --prod --output-path ../ngshop --base-href /ngshop/      - use for AWS Amplify
-nx build admin --prod --output-path ../admin --base-href /admin/      - use for AWS Amplify. Note: You will need to be in the 'bluebits' folder to run this
+nx build admin      -   This creates the app in the 'bluebits/dist' folder
+nx build ngshop     -   This creates the app in the 'bluebits/dist' folder
+nx build ngshop --output-path docs --base-href /ngshop/           - use for GitHub deployment -   This creates the app in the 'bluebits/docs' fold
+nx build admin --output-path docs --base-href /admin/             - use for GitHub deployment -   This creates the app in the 'bluebits/docs' fold
+nx build ngshop --prod --output-path docs --base-href /ngshop/      - use for GitHub deployment -   This creates the app in the 'bluebits/docs' folder
+nx build ngshop --prod --output-path docs --base-href /admin/      - use for GitHub deployment  -   This creates the app in the 'bluebits/docs' folder
+nx build ngshop --prod --output-path ../ngshop --base-href /ngshop/      - use for AWS Amplify deployment -   This creates the app in the 'frontend/admin' folder
+nx build admin --prod --output-path ../admin --base-href /admin/      - use for AWS Amplify. Note: You will need to be in the 'bluebits' folder to run this - This creates the app in the 'frontend/ngshop' folder
+
+For the AWS ones cd into the ngshop and admin folders and create git repos (git init) in ythe following folders:-
