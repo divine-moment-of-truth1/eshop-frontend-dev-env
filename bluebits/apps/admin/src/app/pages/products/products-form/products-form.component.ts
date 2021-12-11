@@ -136,8 +136,10 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
 
   onImageUpload(event) {
     const file = event.target.files[0];
+    console.log("FILE:- " + JSON.stringify(file))
     
     if(file) {
+        console.log("FILE HAS A VALUE:- " + JSON.stringify(file))
         this.form.patchValue({image: file});
         this.form.get('image').updateValueAndValidity();
         
