@@ -37,7 +37,6 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _getProduct(productid?: string) {
     this.productService.getProductById(productid).pipe(takeUntil(this.endSubs$)).subscribe(product => {
         this.product = product;
-        console.log("IMAGE:- " + this.product.image)
     })
   }
 
